@@ -11,8 +11,8 @@ import java.util.List;
  * executed better than 4 threads, but still it is longer than in case of a single thread.
 * */
 public class Main {
-    public static final String SOURCE_FILE = "./resources/many-flowers.jpg";
-    public static final String DESTINATION_FILE = "./out/many-flowers.jpg";
+    private static final String SOURCE_FILE = "./resources/many-flowers.jpg";
+    private static final String DESTINATION_FILE = "./out/many-flowers.jpg";
 
     public static void main(String[] args) throws IOException  {
         BufferedImage originalImage = ImageIO.read(new File(SOURCE_FILE));
@@ -40,7 +40,7 @@ public class Main {
         ImageIO.write(resultImage, "jpg", outputFile);
     }
 
-    public static void recolorMultiThreaded(BufferedImage originalImage, BufferedImage resultImage, int numberOfThreads) {
+    private static void recolorMultiThreaded(BufferedImage originalImage, BufferedImage resultImage, int numberOfThreads) {
         List<Thread> threads = new ArrayList<>();
         int width = originalImage.getWidth();
         int height = originalImage.getHeight();
@@ -69,11 +69,11 @@ public class Main {
         }
     }
 
-    public static void recolorSingleThreaded(BufferedImage originalImage, BufferedImage resultImage) {
+    private static void recolorSingleThreaded(BufferedImage originalImage, BufferedImage resultImage) {
         recolorImage(originalImage, resultImage, 0, 0);
     }
 
-    public static void recolorImage(BufferedImage originalImage, BufferedImage resultImage, int abscissa, int ordinate) {
+    private static void recolorImage(BufferedImage originalImage, BufferedImage resultImage, int abscissa, int ordinate) {
         for(int x = 0; x < abscissa + originalImage.getWidth() && x < originalImage.getWidth(); x++) {
             for(int y = 0;  y < ordinate + originalImage.getHeight() && y < originalImage.getHeight(); y++) {
                 recolorPixel(originalImage, resultImage, x, y);
@@ -81,7 +81,7 @@ public class Main {
         }
     }
 
-    public static void recolorPixel(BufferedImage originalImage, BufferedImage resultImage, int x, int y) {
+    private static void recolorPixel(BufferedImage originalImage, BufferedImage resultImage, int x, int y) {
         int rgb = originalImage.getRGB(x, y); // получаем битовую карту
 
         int red = getRed(rgb); //  извлекаем значение каждого цвета по отдельности
@@ -112,14 +112,14 @@ public class Main {
      * Gets Raster instance which allows to execute write operations on an image object.
      * setDataElements allows to set pixels and accepts coordinates,
     * */
-    public static void setRGB(BufferedImage image, int x, int y, int rgb) {
+    private static void setRGB(BufferedImage image, int x, int y, int rgb) {
         image.getRaster().setDataElements(x, y, image.getColorModel().getDataElements(rgb, null));
     }
 
     /**
     * Creates hex values from decimals.
     * */
-    public static int createRGBFromColors(int red, int green, int blue) {
+    private static int createRGBFromColors(int red, int green, int blue) {
         int rgb = 0;
 
         rgb |= blue;
@@ -130,19 +130,19 @@ public class Main {
         return rgb;
     }
 
-    public static boolean isShadeOfGray(int red, int green, int blue) {
+    private static boolean isShadeOfGray(int red, int green, int blue) {
         return Math.abs(red - green) < 30 && Math.abs(red - blue) < 30 && Math.abs( green - blue) < 30;
     }
 
-    public static int getRed(int rgb) {
+    private static int getRed(int rgb) {
         return (rgb & 0x00FF0000) >> 16;
     }
 
-    public static int getGreen(int rgb) {
+    private static int getGreen(int rgb) {
         return (rgb & 0x0000FF00) >> 8;
     }
 
-    public static int getBlue(int rgb) {
+    private static int getBlue(int rgb) {
         return rgb & 0x000000FF;
     }
 }
